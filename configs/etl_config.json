@@ -1,0 +1,5 @@
+{
+  "deltalocation_for_bets": "somelocation",
+  "deltalocation_for_transactions": "somelocation",
+  "deltalocation_for_output": "outputlocation"
+}

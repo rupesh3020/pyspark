@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pyspark = "==3.2.4"
+pytest = "*"
+azure-storage-blob = "*"
+delta-spark = "*"
+
+[dev-packages]
+pyspark = "==3.2.4"
+ipython = "*"
+"flake8" = "*"
+pytest = "*"
+delta-spark = "*"
+
+[requires]
+python_version = "3.7.9"
