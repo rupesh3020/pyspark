@@ -32,8 +32,6 @@ functions, such that the key Transform steps can be covered by tests
 and jobs or called from within another environment (e.g. a Jupyter or
 Zeppelin notebook).
 """
-import sys
-print(sys.path)
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import *
 import json
@@ -50,7 +48,7 @@ def main():
     spark_config = json.loads(data)
     # start Spark application and get Spark session, logger and config
     spark, log, config = start_spark(
-        app_name='my_etl_job',
+        app_name='assignment',
         files=['configs/etl_config.json'],
         spark_config=spark_config)
 

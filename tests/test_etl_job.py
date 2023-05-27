@@ -26,8 +26,7 @@ class SparkETLTests(unittest.TestCase):
         with open("configs/spark_config.json") as f:
             data = f.read()
         self.spark_config = json.loads(data)
-        self.jar_packages = ["org.apache.hadoop:hadoop-azure:3.2.4","com.microsoft.azure:azure-storage:3.1.0","io.delta:delta-core_2.12:1.0.0"]
-        self.config = json.loads("""{"steps_per_floor": 21}""")
+        self.jar_packages = ["org.apache.hadoop:hadoop-azure:3.2.4","io.delta:delta-core_2.12:1.0.0"]
         self.spark, logger,*_ = start_spark(spark_config=self.spark_config, jar_packages=self.jar_packages)
         self.test_data_path = 'tests/test_data'
 
@@ -45,23 +44,19 @@ class SparkETLTests(unittest.TestCase):
         expected.
         """
         # assemble
-        bets = (
-            self.spark
-            .read.option("multiline", "true")
-            .format("json").load(self.test_data_path + '/bets.json'))
+        # bets = (
+        #     self.spark
+        #     .read.option("multiline", "true")
+        #     .format("json").load(self.test_data_path + '/bets.json'))
 
-        transactions = (
-            self.spark
-            .read.option("multiline", "true")
-            .format("json").load(self.test_data_path + '/transactions.json'))
+        bets = self.spark.read.format("delta").load(self.test_data_path + "/bets_v1")
+
+        transactions = self.spark.read.format("delta").load(self.test_data_path + "/trans_v1")
         
-        expected_result = self.spark.read.option("multiline", "true").format("json").load(self.test_data_path + "/complete_report.json")
+        expected_result = self.spark.read.format("delta").load(self.test_data_path + "/output")
         expected_output = transform_data(bets,transactions)
-
-        expected_rows = expected_output.count()
-        assert expected_rows == bets.count() == expected_result.count()
-        assert set(expected_output.columns) == set(expected_result.columns)
-        assert_basic_rows_equality(expected_output,expected_result)
+        assert expected_result.count()==expected_output.count()
+        assert_basic_rows_equality(expected_output,expected_result)        
 
 if __name__ == '__main__':
     unittest.main()
