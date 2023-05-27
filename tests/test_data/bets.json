@@ -1,0 +1,46 @@
+{
+    "sportsbook_id": "11111111-1111-1111-1111-111111111111",
+    "account_id": "111111111",
+    "legs": [
+        {
+            "price": {
+                "num": 1,
+                "den": 1,
+                "decimal": "1.11",
+                "americanOdds": "+111"
+            },
+            "result": "-",
+            "legPart": {
+                "outcomeRef": "11111111",
+                "marketRef": "11111111",
+                "eventRef": "111111"
+            }
+        }
+    ],
+    "markets": [
+        {
+            "outcomeRef": "11111111",
+            "marketRef": "11111111",
+            "eventRef": "111111",
+            "categoryRef": "FOOTBALL",
+            "outcomeName": "|Atletico Tucuman|",
+            "eventTypeName": "|Argentina Copa de la Superliga|",
+            "className": "|Argentina|",
+            "marketName": "|Match Result|",
+            "eventName": "|Atletico Tucuman| |v| |CA Central Cordoba SE|",
+            "eventStartTime": "2022-03-22T22:15:00.000+0000"
+        },
+        {
+            "outcomeRef": "111112",
+            "marketRef": "111113",
+            "eventRef": "11122",
+            "categoryRef": "FOOTBALL",
+            "outcomeName": "|Bramfelder SV|",
+            "eventTypeName": "|Germany Oberliga Hamburg|",
+            "className": "|Germany|",
+            "marketName": "|Match Result|",
+            "eventName": "|Bramfelder SV| |v| |Union Tornesch|",
+            "eventStartTime": "2022-03-22T18:00:00.000+0000"
+        }
+    ]
+}

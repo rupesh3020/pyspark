@@ -15,6 +15,7 @@ ipython = "*"
 "flake8" = "*"
 pytest = "*"
 delta-spark = "*"
+chispa = "*"
 
 [requires]
 python_version = "3.7.9"

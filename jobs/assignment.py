@@ -90,9 +90,11 @@ def transform_data(bets, transactions):
     """
     combined_df = bets.withColumn("legs", explode("legs")).withColumn("markets",explode("markets")).filter(col("legs.legPart.outcomeRef")==col("markets.outcomeRef"))
     final=combined_df.withColumn("combined", struct("legs.*","markets.*")).groupBy("sportsbook_id", "account_id").agg(collect_list("legs").alias("legs"),collect_list("markets").alias("markets"),collect_list("combined").alias("outcomes"))
-    transactions=transactions.withColumnRenamed("sportsbook_id","sportsbook_id_tra")
-    total=final.join(transactions,final.sportsbook_id==transactions.sportsbooks_id_tra,"left").groupBy("sportsbook_id").agg(collect_list("trans_uuid").alias("all_related_transactions"),first("legs"),first("markets"),first("outcomes"))
-    return total
+    transactions_renamed=transactions.withColumnRenamed("sportsbook_id","sportsbook_id_tra")
+    print(transactions_renamed.columns)
+    joined_dataset=final.join(transactions_renamed,final.sportsbook_id==transactions_renamed.sportsbook_id_tra,"left")
+    joined_grouped_dataset=joined_dataset.groupBy("sportsbook_id").agg(collect_list("trans_uuid").alias("all_related_transactions"),first("legs").alias("legs"),first("markets").alias("markets"),first("outcomes").alias("outcomes"),first("account_id").alias("account_id"))
+    return joined_grouped_dataset
 
 
 def load_data(df:DataFrame):

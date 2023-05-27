@@ -13,8 +13,8 @@ import json
 from pyspark.sql.functions import mean
 
 from dependencies.spark import start_spark
-from jobs.etl_job import transform_data
-
+from jobs.assignment import transform_data
+from chispa.dataframe_comparer import *
 
 class SparkETLTests(unittest.TestCase):
     """Test suite for transformation in etl_job.py
@@ -47,18 +47,21 @@ class SparkETLTests(unittest.TestCase):
         # assemble
         bets = (
             self.spark
-            .read
-            .format("delta").load(self.test_data_path + 'bets_v2'))
+            .read.option("multiline", "true")
+            .format("json").load(self.test_data_path + '/bets.json'))
 
         transactions = (
             self.spark
-            .read
-            .format("delta").load(self.test_data_path + 'bets_v2'))
+            .read.option("multiline", "true")
+            .format("json").load(self.test_data_path + '/transactions.json'))
+        
+        expected_result = self.spark.read.option("multiline", "true").format("json").load(self.test_data_path + "/complete_report.json")
+        expected_output = transform_data(bets,transactions)
 
-        expected_cols = len(bets.columns)
-        expected_rows = bets.count()
-        assert expected_rows == 5
-
+        expected_rows = expected_output.count()
+        assert expected_rows == bets.count() == expected_result.count()
+        assert set(expected_output.columns) == set(expected_result.columns)
+        assert_basic_rows_equality(expected_output,expected_result)
 
 if __name__ == '__main__':
     unittest.main()
